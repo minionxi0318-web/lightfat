@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#6aaa7e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="轻轻瘦">
+  <meta name="description" content="轻量、科学、适合手机使用的个人减脂记录工具">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <title>轻轻瘦 · 科学减脂</title>
+  <style>
+    :root{--bg:#f6f8f5;--card:#fff;--text:#243128;--muted:#7b867f;--line:#e8ece8;--green:#6aaa7e;--green2:#eaf4ec;--danger:#d96d6d;--shadow:0 8px 28px rgba(42,65,48,.08)}
+    *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+    body{min-height:100vh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+    button,input,select{font:inherit}button{border:0;cursor:pointer}.app{max-width:680px;margin:0 auto;padding:env(safe-area-inset-top) 16px 24px}
+    header{padding:20px 2px 14px;display:flex;justify-content:space-between;align-items:center}.brand{font-size:25px;font-weight:800;letter-spacing:-.5px}.brand span{color:var(--green)}.sub{font-size:12px;color:var(--muted);margin-top:3px}.iconbtn{width:40px;height:40px;border-radius:14px;background:#fff;box-shadow:var(--shadow);color:var(--text)}
+    .page{display:none}.page.active{display:block}.hero{background:linear-gradient(135deg,#eaf5ec,#f9fbf8);border:1px solid #e0ebe2;border-radius:24px;padding:20px;box-shadow:var(--shadow);margin-bottom:14px}.hero-title{font-size:14px;color:var(--muted)}.hero-number{font-size:44px;font-weight:800;letter-spacing:-2px;margin:3px 0}.hero-number small{font-size:18px;font-weight:600;letter-spacing:0}.hero-row{display:flex;gap:10px;flex-wrap:wrap}.pill{background:#fff;border:1px solid #e3ebe4;padding:7px 10px;border-radius:999px;font-size:12px;color:#536057}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}.card h2{font-size:15px;margin:0 0 12px}.metric{font-size:27px;font-weight:800}.metric small{font-size:13px;color:var(--muted);font-weight:500}.label{font-size:12px;color:var(--muted);margin-bottom:5px}.hint{font-size:12px;color:var(--muted);line-height:1.6}.progress{height:9px;background:#edf0ed;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--green);border-radius:99px;width:0;transition:width .25s}.field{margin-bottom:11px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input,.field select{width:100%;height:46px;border:1px solid #dfe5df;border-radius:13px;background:#fff;padding:0 13px;color:var(--text);outline:none}.field input:focus,.field select:focus{border-color:var(--green)}.btn{width:100%;height:46px;border-radius:13px;background:var(--green);color:#fff;font-weight:700}.btn.secondary{background:var(--green2);color:#4c7658}.btn.ghost{background:#f3f5f3;color:#5d6860}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.log{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.log:last-child{border-bottom:0}.log strong{font-size:14px}.log span{font-size:12px;color:var(--muted)}.empty{text-align:center;padding:20px 0;color:var(--muted);font-size:13px}
+    nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(680px,100%);padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);z-index:10}nav button{background:transparent;color:#8a948d;font-size:11px;padding:5px 0}nav button b{display:block;font-size:21px;line-height:22px;margin-bottom:2px}nav button.active{color:var(--green);font-weight:700}
+    .toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#26332b;color:#fff;padding:10px 15px;border-radius:999px;font-size:13px;transition:.25s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .install{display:none}.smalltable{width:100%;border-collapse:collapse;font-size:12px}.smalltable th,.smalltable td{text-align:left;padding:9px 4px;border-bottom:1px solid var(--line)}.smalltable th{color:var(--muted);font-weight:500}.danger{color:var(--danger)}
+    @media(min-width:600px){.grid{grid-template-columns:repeat(4,1fr)}.hero-number{font-size:50px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header><div><div class="brand">轻轻<span>瘦</span></div><div class="sub">把减脂变成每天 3 分钟的小事</div></div><button class="iconbtn" id="resetBtn" title="清除本机数据">↺</button></header>
+
+  <main id="today" class="page active">
+    <section class="hero"><div class="hero-title">当前体重</div><div class="hero-number"><span id="heroWeight">—</span><small> kg</small></div><div class="hero-row"><span class="pill">目标 <b id="heroGoal">—</b> kg</span><span class="pill">剩余 <b id="heroLeft">—</b> kg</span></div></section>
+    <div class="grid">
+      <div class="card"><div class="label">BMI</div><div class="metric" id="bmi">—</div></div>
+      <div class="card"><div class="label">基础代谢 BMR</div><div class="metric" id="bmr">— <small>kcal</small></div></div>
+      <div class="card"><div class="label">每日消耗 TDEE</div><div class="metric" id="tdee">— <small>kcal</small></div></div>
+      <div class="card"><div class="label">建议摄入</div><div class="metric" id="targetCal">— <small>kcal</small></div></div>
+    </div>
+    <section class="card"><h2>今日打卡</h2><div class="field"><label>今天体重（kg）</label><input id="weightInput" type="number" step="0.1" inputmode="decimal" placeholder="例如 59.0"></div><div class="field"><label>今日摄入（kcal）</label><input id="calInput" type="number" step="1" inputmode="numeric" placeholder="例如 1200"></div><div class="field"><label>运动（分钟）</label><input id="exerciseInput" type="number" step="1" inputmode="numeric" placeholder="例如 30"></div><div class="field"><label>饮水（ml）</label><input id="waterInput" type="number" step="100" inputmode="numeric" placeholder="例如 1500"></div><button class="btn" id="saveToday">保存今日记录</button></section>
+    <section class="card"><h2>减脂进度</h2><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px"><span id="startText">起始 —</span><span id="goalText">目标 —</span></div><div class="progress"><i id="progressBar"></i></div><p class="hint" id="progressHint">先在“我的”里设置身高、体重和目标体重。</p></section>
+    <section class="card"><h2>今天的小提醒</h2><p class="hint" id="tip">稳定的热量缺口、足够蛋白质、规律活动，比极端节食更重要。工具仅用于记录与估算，不替代医生诊疗。</p></section>
+  </main>
+
+  <main id="progress" class="page">
+    <section class="card"><h2>体重记录</h2><div id="history"></div></section>
+    <section class="card"><h2>简单趋势</h2><div class="hint" id="trend">还没有足够的数据。</div><div id="trendBars" style="margin-top:14px"></div></section>
+  </main>
+
+  <main id="profile" class="page">
+    <section class="card"><h2>我的基础信息</h2><div class="field"><label>性别</label><select id="sex"><option value="female">女性</option><option value="male">男性</option></select></div><div class="field"><label>年龄</label><input id="age" type="number" min="12" max="100" inputmode="numeric" placeholder="例如 32"></div><div class="field"><label>身高（cm）</label><input id="height" type="number" step="0.1" inputmode="decimal" placeholder="例如 160"></div><div class="field"><label>起始体重（kg）</label><input id="startWeight" type="number" step="0.1" inputmode="decimal" placeholder="例如 65"></div><div class="field"><label>目标体重（kg）</label><input id="goalWeight" type="number" step="0.1" inputmode="decimal" placeholder="例如 55"></div><div class="field"><label>日常活动水平</label><select id="activity"><option value="1.2">久坐 / 很少运动</option><option value="1.375">轻度活动（每周 1–3 次）</option><option value="1.55">中度活动（每周 3–5 次）</option><option value="1.725">较高活动（每周 6–7 次）</option></select></div><button class="btn" id="saveProfile">保存并计算</button></section>
+    <section class="card"><h2>估算规则</h2><table class="smalltable"><tr><th>项目</th><th>说明</th></tr><tr><td>BMI</td><td>体重 ÷ 身高²</td></tr><tr><td>BMR</td><td>Mifflin–St Jeor 公式估算</td></tr><tr><td>TDEE</td><td>BMR × 活动系数</td></tr><tr><td>建议摄入</td><td>以 TDEE 为基础，默认约减少 15%</td></tr><tr><td>蛋白质</td><td>可按目标体重约 1.2–1.6 g/kg 自行规划</td></tr></table><p class="hint" style="margin-top:10px">所有数值都是估算值。若存在疾病、孕期/哺乳期、饮食障碍史或医生给出的特殊饮食要求，应以专业医疗建议为准。</p></section>
+    <section class="card"><h2>iPhone 使用</h2><p class="hint">用 Safari 打开网页后，点“分享”→“添加到主屏幕”，打开“作为 Web App”即可像 App 一样使用。数据默认保存在这台设备的浏览器本地。</p><button class="btn secondary install" id="installBtn">添加到主屏幕</button></section>
+  </main>
+</div>
+<nav><button class="active" data-page="today"><b>⌂</b>今日</button><button data-page="progress"><b>↗</b>进度</button><button data-page="profile"><b>♡</b>我的</button></nav><div class="toast" id="toast"></div>
+<script>
+const KEY='lightfat-v1';
+let state=JSON.parse(localStorage.getItem(KEY)||'null')||{profile:{sex:'female',age:'',height:'',startWeight:'',goalWeight:'',activity:'1.2'},logs:[]};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function num(v){return Number(v)||0}
+function calc(){const p=state.profile,h=num(p.height),w=latestWeight(),age=num(p.age);let bmi=h&&w?w/((h/100)**2):0;let bmr=h&&w&&age?(10*w+6.25*h-5*age+(p.sex==='male'?5:-161)):0;let tdee=bmr*num(p.activity||1.2);let target=tdee?Math.max(1000,Math.round(tdee*.85/10)*10):0;return {bmi,bmr,tdee,target}}
+function latestWeight(){return state.logs.length?num(state.logs[0].weight):num(state.profile.startWeight)}
+function fmt(x,d=1){return x?x.toFixed(d):'—'}
+function render(){const c=calc(),p=state.profile,w=latestWeight(),goal=num(p.goalWeight),start=num(p.startWeight);$('heroWeight').textContent=fmt(w);$('heroGoal').textContent=goal?fmt(goal):'—';$('heroLeft').textContent=(w&&goal)?fmt(Math.max(0,w-goal)): '—';$('bmi').textContent=c.bmi?fmt(c.bmi,1):'—';$('bmr').innerHTML=c.bmr?Math.round(c.bmr)+' <small>kcal</small>':'— <small>kcal</small>';$('tdee').innerHTML=c.tdee?Math.round(c.tdee)+' <small>kcal</small>':'— <small>kcal</small>';$('targetCal').innerHTML=c.target?c.target+' <small>kcal</small>':'— <small>kcal</small>';
+ $('startText').textContent='起始 '+(start?fmt(start)+' kg':'—');$('goalText').textContent='目标 '+(goal?fmt(goal)+' kg':'—');let pct=(start&&goal&&w)?Math.max(0,Math.min(100,(start-w)/(start-goal)*100)):0;$('progressBar').style.width=pct+'%';$('progressHint').textContent=start&&goal&&w?`已完成约 ${Math.round(pct)}%，剩余 ${fmt(Math.max(0,w-goal))} kg。`: '先在“我的”里设置身高、体重和目标体重。';renderHistory();fillProfile();}
+function renderHistory(){const box=$('history');if(!state.logs.length){box.innerHTML='<div class="empty">还没有记录，先完成今天的打卡吧。</div>';return}box.innerHTML=state.logs.slice(0,30).map((x,i)=>`<div class="log"><div><strong>${x.date}</strong><br><span>${x.cal?x.cal+' kcal · ':''}${x.exercise?x.exercise+' 分钟运动 · ':''}${x.water?x.water+' ml 饮水':''}</span></div><div><strong>${fmt(num(x.weight))} kg</strong>${i===0?'<br><span>最新</span>':''}</div></div>`).join('');let ws=state.logs.filter(x=>num(x.weight)).map(x=>num(x.weight));if(ws.length>=2){let diff=ws[0]-ws[ws.length-1];$('trend').textContent=`最近 ${ws.length} 次记录变化：${diff>=0?'下降':'上升'} ${Math.abs(diff).toFixed(1)} kg。单日波动受水分、盐分、经期和排便等影响，建议看 7 天趋势。`;}
+}
+function fillProfile(){for(const id of ['sex','age','height','startWeight','goalWeight','activity']) if($(id)) $(id).value=state.profile[id]??''}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
+$('saveProfile').onclick=()=>{for(const id of ['sex','age','height','startWeight','goalWeight','activity'])state.profile[id]=$(id).value;save();render();toast('已保存，计算完成');}
+$('saveToday').onclick=()=>{const weight=num($('weightInput').value),cal=num($('calInput').value),exercise=num($('exerciseInput').value),water=num($('waterInput').value);if(!weight&&!cal&&!exercise&&!water){toast('至少填写一项');return}const date=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'});state.logs=state.logs.filter(x=>x.date!==date);state.logs.unshift({date,weight,cal,exercise,water});if(weight&&!state.profile.startWeight)state.profile.startWeight=weight;save();render();$('weightInput').value='';$('calInput').value='';$('exerciseInput').value='';$('waterInput').value='';toast('今日记录已保存');}
+$('resetBtn').onclick=()=>{if(confirm('确定清除这台设备上的全部轻轻瘦数据吗？')){localStorage.removeItem(KEY);state={profile:{sex:'female',age:'',height:'',startWeight:'',goalWeight:'',activity:'1.2'},logs:[]};render();toast('已清除本机数据')}};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.page).classList.add('active');});
+let deferredPrompt=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const btn=$('installBtn');btn.style.display='block';btn.onclick=async()=>{deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;btn.style.display='none'}});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+render();
+</script>
+</body>
+</html>
